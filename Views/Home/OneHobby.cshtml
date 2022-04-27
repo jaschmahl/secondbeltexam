@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = ViewBag.hobby.name;
+}
+
+@model Hobby
+
+@{bool creator = false;}
+@if (ViewBag.loggeduser.userid == ViewBag.hobby.userid)
+{
+    creator = true;
+}
+
+<div class="container d-flex justify-content-between align-items-center">
+    <h1>@ViewBag.hobby.name</h1>
+    @if (creator)
+    {
+        <div class="px-2">
+            <a href="/hobbies/delete/@ViewBag.hobby.hobbyid" class="btn btn-danger btn-md">Delete Hobby</a>
+            <a href="/hobbies/edit/@ViewBag.hobby.hobbyid" class="btn btn-secondary btn-md">Edit Hobby</a>
+        </div>
+    }
+</div>
+
+<div class="container">
+    <h3>Description:</h3>
+    <p>@ViewBag.hobby.description</p>
+</div>
+
+<div class="container d-flex justify-content-between">
+    <div>
+        <h3>@ViewBag.hobby.name Enthusiasts:</h3>
+        <ul>
+            @foreach (Enthusiast e in ViewBag.hobby.Enthusiasts)
+            {
+                <li>@e.user.firstname</li>
+            }
+        </ul>
+    </div>
+    @{bool foundenthusiast = false;}
+    @foreach (Enthusiast e in ViewBag.hobby.Enthusiasts)
+    {
+        @if (ViewBag.loggeduser.userid == e.userid)
+        {
+            foundenthusiast = true;
+        }        
+    }
+    @if (!foundenthusiast)
+    {
+        <div class="justify-content-end">
+            <h3>Become an Enthusiast!</h3>
+            <form action="/enthusiasts/add/@ViewBag.loggeduser.userid/@ViewBag.hobby.hobbyid" method="post">
+                <input type="hidden" asp-for="userid" value="@ViewBag.loggeduser.userid">
+                <input type="hidden" asp-for="hobbyid" value="@ViewBag.hobby.hobbyid">
+                <input type="submit" value="Add to Hobbies" class="btn btn-primary btn-md">
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="justify-content-end">
+            <a href="/enthusiasts/delete/@ViewBag.loggeduser.userid" class="btn btn-danger btn-lg">Remove from Hobbies</a>
+        </div>
+    }
+</div>

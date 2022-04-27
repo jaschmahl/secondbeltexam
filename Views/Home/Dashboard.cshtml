@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Hobbies";
+}
+
+@model Hobby
+
+<div class="text-center">
+    <h1 class="text-center">Hobbies</h1>
+</div>
+<table class="table table-dark text-center">
+        <tr>
+            <th>Name</th>
+            <th>Enthusiasts</th>
+        </tr>
+        @foreach (Hobby h in ViewBag.allhobbies)
+        {
+        <tr>
+            <th><a href="/hobbies/@h.hobbyid">@h.name</a></th>
+            <th>@h.Enthusiasts.Count</th>
+        </tr>
+        }
+</table>
